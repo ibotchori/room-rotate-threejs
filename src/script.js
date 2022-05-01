@@ -39,20 +39,21 @@ camera.position.set(-10, 30, 30);
 // call update method every time when camera position is changed
 orbit.update();
 
-// Objects
-const geometry = new THREE.TorusGeometry(5, 1, 16, 100);
+/* Objects */
+// Floor
+const floorGeometry = new THREE.PlaneGeometry(30, 30);
+const floorMaterial = new THREE.MeshBasicMaterial({
+  color: 0x759e88,
+  side: THREE.DoubleSide,
+});
+const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+// change floor position
+floor.rotation.x = -0.5 * Math.PI;
+// receive shadow to floor
+floor.receiveShadow = true;
+scene.add(floor);
 
-// Materials
-
-const material = new THREE.MeshBasicMaterial();
-material.color = new THREE.Color(0xff0000);
-
-// Mesh
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
-
-// Lights
-
+/* Lights */
 const pointLight = new THREE.PointLight(0xffffff, 0.1);
 pointLight.position.x = 2;
 pointLight.position.y = 3;
@@ -80,14 +81,7 @@ window.addEventListener("resize", () => {
 });
 
 /* Animate  */
-const clock = new THREE.Clock();
-
 const animate = () => {
-  const elapsedTime = clock.getElapsedTime();
-
-  // Update objects
-  sphere.rotation.y = 0.5 * elapsedTime;
-
   // Render
   renderer.render(scene, camera);
 };
