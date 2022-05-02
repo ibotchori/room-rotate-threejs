@@ -87,9 +87,22 @@ floor.receiveShadow = true;
 const gridHelper = new THREE.GridHelper(30);
 // scene.add(gridHelper);
 
-// 3D models from blender
-const assetLoader = new GLTFLoader();
+// show loading screen before load assets
+const loadingManager = new THREE.LoadingManager();
 
+const progressBar = document.getElementById("progress-bar");
+loadingManager.onProgress = function (url, loaded, total) {
+  progressBar.value = (loaded / total) * 100;
+};
+
+const progressBarContainer = document.querySelector(".progress-bar-container");
+loadingManager.onLoad = function () {
+  progressBarContainer.style.display = "none";
+};
+
+const assetLoader = new GLTFLoader(loadingManager);
+
+// 3D models from blender
 let room;
 let roomLarge;
 
