@@ -2,6 +2,12 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+// Loader
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+// import 3D model
+const roomURL = new URL("./assets/room.glb", import.meta.url);
+const roomLargeURL = new URL("./assets/roomL.glb", import.meta.url);
+
 // Init renderer
 const renderer = new THREE.WebGLRenderer({
   // enable transparent background
@@ -52,6 +58,43 @@ floor.rotation.x = -0.5 * Math.PI;
 // receive shadow to floor
 floor.receiveShadow = true;
 scene.add(floor);
+
+// Grid helper for floor
+const gridHelper = new THREE.GridHelper(30);
+scene.add(gridHelper);
+
+// 3D models from blender
+const assetLoader = new GLTFLoader();
+
+let room;
+let roomLarge;
+
+assetLoader.load(
+  roomURL.href,
+  function (gltf) {
+    room = gltf.scene;
+    room.rotation.y -= Math.PI;
+    room.position.set(-8, 1, 7);
+    scene.add(room);
+  },
+  undefined,
+  function (error) {
+    console.log(error);
+  }
+);
+
+assetLoader.load(
+  roomLargeURL.href,
+  function (gltf) {
+    roomLarge = gltf.scene;
+    scene.add(roomLarge);
+    roomLarge.position.set(7, 1, 7);
+  },
+  undefined,
+  function (error) {
+    console.log(error);
+  }
+);
 
 /* Lights */
 const pointLight = new THREE.PointLight(0xffffff, 0.1);
