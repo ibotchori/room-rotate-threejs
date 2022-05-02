@@ -45,7 +45,7 @@ const camera = new THREE.PerspectiveCamera(
 const orbit = new OrbitControls(camera, renderer.domElement);
 
 const axesHelper = new THREE.AxesHelper(10);
-scene.add(axesHelper);
+//scene.add(axesHelper);
 
 // Camera positions
 camera.position.set(-10, 30, 30);
@@ -85,7 +85,7 @@ floor.receiveShadow = true;
 
 // grid helper for floor
 const gridHelper = new THREE.GridHelper(30);
-scene.add(gridHelper);
+// scene.add(gridHelper);
 
 // 3D models from blender
 const assetLoader = new GLTFLoader();
@@ -130,11 +130,27 @@ document.getElementById("button").addEventListener("click", rotateObject);
 /* Lights */
 
 // Spotlight
-const pointLight = new THREE.PointLight(0xffffff, 2);
-pointLight.position.x = 2;
-pointLight.position.y = 3;
-pointLight.position.z = 4;
-scene.add(pointLight);
+const spotLightLeft = new THREE.SpotLight(0xffffff, 1.3);
+spotLightLeft.position.set(-100, 100, 0);
+spotLightLeft.angle = 0.2;
+
+spotLightLeft.castShadow = true;
+scene.add(spotLightLeft);
+
+// spot light helper, to see where is light from
+const sLightLeftHelper = new THREE.SpotLightHelper(spotLightLeft);
+// scene.add(sLightLeftHelper);
+
+const spotLightRight = new THREE.SpotLight(0xffffff);
+spotLightRight.position.set(40, 100, 80);
+spotLightRight.angle = 0.2;
+
+spotLightRight.castShadow = true;
+scene.add(spotLightRight);
+
+// spot light helper, to see where is light from
+const sLightRightHelper = new THREE.SpotLightHelper(spotLightRight);
+// scene.add(sLightRightHelper);
 
 /* Sizes - Making the canvas responsive */
 const sizes = {
