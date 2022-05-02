@@ -10,6 +10,10 @@ const roomLargeURL = new URL("./assets/roomL.glb", import.meta.url);
 
 // image
 import stars from "./img/stars.jpg";
+// textures
+import rockColor from "./img/textures/Rock_Moss_001_basecolor.jpg";
+import rockNormal from "./img/textures/Rock_Moss_001_normal.jpg";
+import rockHeight from "./img/textures/Rock_Moss_001_height.png";
 
 // Init renderer
 const renderer = new THREE.WebGLRenderer({
@@ -60,20 +64,26 @@ scene.background = cubeTextureLoader.load([
 ]);
 
 /* Objects */
+const textureLoader = new THREE.TextureLoader();
+
 // Floor
-const floorGeometry = new THREE.PlaneGeometry(30, 30);
-const floorMaterial = new THREE.MeshBasicMaterial({
-  color: 0x759e88,
+const floorGeometry = new THREE.PlaneGeometry(30, 30, 100, 100);
+const floorMaterial = new THREE.MeshStandardMaterial({
   side: THREE.DoubleSide,
+  map: textureLoader.load(rockColor),
+  normalMap: textureLoader.load(rockNormal),
+  displacementMap: textureLoader.load(rockHeight),
+  displacementScale: 1,
 });
+
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-// change floor position
-floor.rotation.x = -0.5 * Math.PI;
-// receive shadow to floor
-floor.receiveShadow = true;
 scene.add(floor);
 
-// Grid helper for floor
+// change floor position
+floor.rotation.x = -0.5 * Math.PI;
+floor.receiveShadow = true;
+
+// grid helper for floor
 const gridHelper = new THREE.GridHelper(30);
 scene.add(gridHelper);
 
@@ -110,16 +120,17 @@ assetLoader.load(
   }
 );
 
-/* rotate Object 90 degrees to the right, on click event */
+/* Rotate Objects 90 degrees to the right on button click */
 const rotateObject = () => {
   room.rotation.y -= Math.PI / 2;
   roomLarge.rotation.y -= Math.PI / 2;
 };
 document.getElementById("button").addEventListener("click", rotateObject);
-/* rotate Object 90 degrees to the right, on click event */
 
 /* Lights */
-const pointLight = new THREE.PointLight(0xffffff, 0.1);
+
+// Spotlight
+const pointLight = new THREE.PointLight(0xffffff, 2);
 pointLight.position.x = 2;
 pointLight.position.y = 3;
 pointLight.position.z = 4;
