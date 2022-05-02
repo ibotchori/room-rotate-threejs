@@ -8,3 +8,10 @@ body {
   height: 100vh;
   font-family: "Poppins";
 }
+
+#button {
+  color: aliceblue;
+  position: absolute;
+  background-color: red;
+  cursor: pointer;
+}

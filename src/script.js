@@ -96,6 +96,14 @@ assetLoader.load(
   }
 );
 
+/* rotate Object 90 degrees to the right, on click event */
+const rotateObject = () => {
+  room.rotation.y -= Math.PI / 2;
+  roomLarge.rotation.y -= Math.PI / 2;
+};
+document.getElementById("button").addEventListener("click", rotateObject);
+/* rotate Object 90 degrees to the right, on click event */
+
 /* Lights */
 const pointLight = new THREE.PointLight(0xffffff, 0.1);
 pointLight.position.x = 2;
