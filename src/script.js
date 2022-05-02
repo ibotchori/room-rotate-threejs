@@ -8,6 +8,9 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 const roomURL = new URL("./assets/room.glb", import.meta.url);
 const roomLargeURL = new URL("./assets/roomL.glb", import.meta.url);
 
+// image
+import stars from "./img/stars.jpg";
+
 // Init renderer
 const renderer = new THREE.WebGLRenderer({
   // enable transparent background
@@ -44,6 +47,17 @@ scene.add(axesHelper);
 camera.position.set(-10, 30, 30);
 // call update method every time when camera position is changed
 orbit.update();
+
+// scene background
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+scene.background = cubeTextureLoader.load([
+  stars,
+  stars,
+  stars,
+  stars,
+  stars,
+  stars,
+]);
 
 /* Objects */
 // Floor
