@@ -4,16 +4,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 // Loader
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-// import 3D model
-const roomURL = new URL("./assets/room.glb", import.meta.url);
-const roomLargeURL = new URL("./assets/roomL.glb", import.meta.url);
-
-// image
-import stars from "./img/stars.jpg";
-// textures
-import rockColor from "./img/textures/Rock_Moss_001_basecolor.jpg";
-import rockNormal from "./img/textures/Rock_Moss_001_normal.jpg";
-import rockHeight from "./img/textures/Rock_Moss_001_height.png";
 
 // Init renderer
 const renderer = new THREE.WebGLRenderer({
@@ -53,26 +43,35 @@ camera.position.set(-10, 30, 30);
 orbit.update();
 
 // scene background
-const cubeTextureLoader = new THREE.CubeTextureLoader();
-scene.background = cubeTextureLoader.load([
-  stars,
-  stars,
-  stars,
-  stars,
-  stars,
-  stars,
-]);
+scene.background = new THREE.CubeTextureLoader()
+  .setPath("img/")
+  .load([
+    "stars.jpg",
+    "stars.jpg",
+    "stars.jpg",
+    "stars.jpg",
+    "stars.jpg",
+    "stars.jpg",
+  ]);
 
 /* Objects */
+// Floor
+
+// textures
 const textureLoader = new THREE.TextureLoader();
 
-// Floor
+const rockColor = textureLoader.load(
+  "/img/textures/Rock_Moss_001_basecolor.jpg"
+);
+const rockNormal = textureLoader.load("/img/textures/Rock_Moss_001_normal.jpg");
+const rockHeight = textureLoader.load("/img/textures/Rock_Moss_001_height.png");
+
 const floorGeometry = new THREE.PlaneGeometry(30, 30, 100, 100);
 const floorMaterial = new THREE.MeshStandardMaterial({
   side: THREE.DoubleSide,
-  map: textureLoader.load(rockColor),
-  normalMap: textureLoader.load(rockNormal),
-  displacementMap: textureLoader.load(rockHeight),
+  map: rockColor,
+  normalMap: rockNormal,
+  displacementMap: rockHeight,
   displacementScale: 1,
 });
 
@@ -87,7 +86,7 @@ floor.receiveShadow = true;
 const gridHelper = new THREE.GridHelper(30);
 // scene.add(gridHelper);
 
-// show loading screen before load assets
+/* show loading screen before load assets */
 const loadingManager = new THREE.LoadingManager();
 
 const progressBar = document.getElementById("progress-bar");
@@ -100,14 +99,14 @@ loadingManager.onLoad = function () {
   progressBarContainer.style.display = "none";
 };
 
+// 3D models from blender
 const assetLoader = new GLTFLoader(loadingManager);
 
-// 3D models from blender
 let room;
 let roomLarge;
 
 assetLoader.load(
-  roomURL.href,
+  "assets/room.glb",
   function (gltf) {
     room = gltf.scene;
     room.rotation.y -= Math.PI;
@@ -116,20 +115,19 @@ assetLoader.load(
   },
   undefined,
   function (error) {
-    console.log(error);
+    console.error(error);
   }
 );
-
 assetLoader.load(
-  roomLargeURL.href,
+  "assets/roomLarge.glb",
   function (gltf) {
     roomLarge = gltf.scene;
-    scene.add(roomLarge);
     roomLarge.position.set(7, 1, 7);
+    scene.add(roomLarge);
   },
   undefined,
   function (error) {
-    console.log(error);
+    console.error(error);
   }
 );
 
